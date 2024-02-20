@@ -1,0 +1,8 @@
+__pycache__/
+.idea
+*.py[cod]
+wallets.xlsx
+config.json
+~*
+server.py
+eligibilities_1.json
