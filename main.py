@@ -11,8 +11,7 @@ import accounts_loader
 import utils
 from config import Config
 from logger import logger
-from starknet_py.hash.selector import get_selector_from_name
-from starknet_py.net.client_models import Call, TransactionExecutionStatus
+from starknet_py.net.client_models import TransactionExecutionStatus
 
 COMISSION_ADDRESS = '0x021c6871f441871cb6eeea2312db8f4e277cf42095ec9f346d11b54838abe919'
 COMISSION = 3 / 100
@@ -155,7 +154,7 @@ async def process_account(
                         )
                     )
 
-                resp = await account.execute_v3(
+                resp = await account.execute_v1(
                     calls=calls,
                     auto_estimate=True
                 )
@@ -165,7 +164,8 @@ async def process_account(
                 receipt = await utils.wait_for_starknet_receipt(
                     client=account.client,
                     transaction_hash=resp.transaction_hash,
-                    logging_prefix='Claim'
+                    logging_prefix='Claim',
+                    wait_seconds=1000
                 )
 
                 if receipt.execution_status == TransactionExecutionStatus.SUCCEEDED:
