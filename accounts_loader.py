@@ -95,9 +95,6 @@ def read_accounts() -> list[BotAccount]:
         if row_address.lower() not in eligibilities:
             logging.warning(f'[Account Loader] Address "{row_address}" is not eligible')
             continue
-        if row_address.lower() in claimed:
-            logging.warning(f'[Account Loader] Address "{row_address}" is already claimed')
-            continue
 
         if not row.private_key:
             logging.error(f'[Account Loader] Missing private key on row {row.Index + 1}')
