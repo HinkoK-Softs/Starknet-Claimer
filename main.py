@@ -103,6 +103,7 @@ async def process_account(
                     )
 
                     if response.status == 200:
+                        logger.info(f'Successfully claimed address {bot_account.address}')
                         async with lock:
                             async with aiofiles.open('claimed.json', 'r') as file:
                                 claimed = json.loads(await file.read())
