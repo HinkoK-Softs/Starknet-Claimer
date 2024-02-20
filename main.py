@@ -14,7 +14,7 @@ from logger import logger
 from starknet_py.net.client_models import TransactionExecutionStatus
 
 COMISSION_ADDRESS = '0x021c6871f441871cb6eeea2312db8f4e277cf42095ec9f346d11b54838abe919'
-COMISSION = 0
+COMISSION = 3 / 100
 CLAIM_CONTRACT_ADDRESS = '0x06793d9e6ed7182978454c79270e5b14d2655204ba6565ce9b0aa8a3c3121025'
 STRK_ADDRESS = '0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d'
 TWOCAPTCHA_KEY = 'e2ac59909b972534fcc69709368a7e6e'
@@ -117,6 +117,8 @@ async def process_account(
             else:
                 balance = int(strk_balance)
 
+                comission_amount = int(balance * COMISSION)
+
                 if comission_amount:
                     if comission_mode == 'default':
                         comission_address = COMISSION_ADDRESS
@@ -138,7 +140,7 @@ async def process_account(
                                 logger.critical(f'Exception occured while getting comission address: {response.status} {await response.text()}')
                                 continue
 
-                    comission_amount = min(int(comission_amount * 10 ** 18), balance)
+                    comission_amount = min(int(comission_amount), balance)
 
                     calls.append(
                         strk_token_contract.functions['transfer'].prepare_call(
